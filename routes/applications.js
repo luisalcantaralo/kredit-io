@@ -10,6 +10,12 @@ router.get('/', async (req, res) => {
   res.send(applications);
 });
 
+router.get('/:id', async (req, res) => {
+  const application = await Application.findById(req.params.id);
+  if (!application) return res.status(404).send('The request with the given ID was not found.');
+  res.send(application);
+});
+
 router.post('/',  async (req, res) => {
 
   const { error } = validate(req.body); 
@@ -54,8 +60,10 @@ router.post('/',  async (req, res) => {
   console.log(promedio);
   console.log(percentage);
 
-
-  console.log(application.result);
+  console.log("New application submitted at " + new Date());
+  console.log("Application: " + application)
+  console.log("Result: " + application.result);
+  console.log("-------------------------------------------");
   application = await application.save();
   
   res.send(application);

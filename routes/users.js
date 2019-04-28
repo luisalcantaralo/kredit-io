@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     res.send(users);
   });
 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message );
     
@@ -25,7 +25,7 @@ router.post('/', auth, async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     await user.save();
     
-    const token = jwt.sign({user: user}, config.get('jwtPrivateKey'));
+    const token = jwt.sign({_id: this._id, isAdmin: this.isAdmin}, config.get('jwtPrivateKey'));
     res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
